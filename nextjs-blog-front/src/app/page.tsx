@@ -1,7 +1,7 @@
 export default function Home() {
   return (
     <div>
-      hello nextjs
+      测试页面
     </div>
   );
 }
