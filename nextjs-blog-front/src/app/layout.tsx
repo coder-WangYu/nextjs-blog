@@ -76,7 +76,7 @@ export default function RootLayout({
               justifyContent: 'space-between'
             }}>
               <div className="logo" style={{ fontSize: '1.5rem', fontWeight: 700 }}>
-                <Link href="/" style={{ color: '#1890ff' }}>我的博客</Link>
+                <Link href="/" style={{ color: '#1890ff' }}>冬宇的博客</Link>
               </div>
               <Menu 
                 mode="horizontal" 
@@ -101,7 +101,7 @@ export default function RootLayout({
               padding: '1rem 0'
             }}>
               <Text style={{ color: '#e5e7eb' }}>
-                © {new Date().getFullYear()} 我的个人博客 - 保留所有权利
+                © {new Date().getFullYear()} 冬宇的个人博客 - 保留所有权利
               </Text>
             </Footer>
           </Layout>

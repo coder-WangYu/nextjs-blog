@@ -41,7 +41,7 @@ export default function Home() {
               欢迎来到我的个人空间，这里记录着我的思考、创作和生活点滴。
             </Paragraph>
             <Button type="primary" size="large" href="/blog">
-              阅读博客 <ArrowRightOutlined />
+              进入博客 <ArrowRightOutlined />
             </Button>
           </div>
         </div>
