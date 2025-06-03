@@ -5,7 +5,8 @@ const router = express.Router();
 const users = [
   { id: 1, name: '张三', email: 'zhangsan@example.com', age: 25 },
   { id: 2, name: '李四', email: 'lisi@example.com', age: 30 },
-  { id: 3, name: '王五', email: 'wangwu@example.com', age: 28 }
+  { id: 3, name: '王五', email: 'wangwu@example.com', age: 28 },
+  { id: 4, name: '赵六', email: 'zhaoliu@example.com', age: 21 }
 ];
 
 // 获取用户列表
