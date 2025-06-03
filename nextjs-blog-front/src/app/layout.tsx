@@ -31,12 +31,7 @@ const menuItems = [
     key: 'about',
     icon: <UserOutlined />,
     label: <Link href="/about">关于</Link>,
-  },
-  {
-    key: 'contact',
-    icon: <MailOutlined />,
-    label: <Link href="/contact">联系</Link>,
-  },
+  }
 ];
 
 export default function RootLayout({

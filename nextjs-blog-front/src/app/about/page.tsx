@@ -1,10 +1,10 @@
 'use client';
 
-import { Typography, Card, List, Divider, Avatar } from 'antd';
-import { UserOutlined, MailOutlined } from '@ant-design/icons';
+import { Typography, Card, List, Divider, Avatar, Space } from 'antd';
+import { UserOutlined, MailOutlined, GithubOutlined, WechatOutlined } from '@ant-design/icons';
 import Image from 'next/image';
 
-const { Title, Paragraph } = Typography;
+const { Title, Paragraph, Text } = Typography;
 
 export default function About() {
   const interests = [
@@ -13,6 +13,24 @@ export default function About() {
     '旅行探索',
     '阅读与写作',
     '音乐欣赏'
+  ];
+
+  const contactInfo = [
+    {
+      icon: <MailOutlined style={{ fontSize: '24px' }} />,
+      title: '邮箱',
+      content: 'coder_wangyu@163.com'
+    },
+    {
+      icon: <WechatOutlined style={{ fontSize: '24px' }} />,
+      title: '微信',
+      content: 'Lrwy999999'
+    },
+    {
+      icon: <GithubOutlined style={{ fontSize: '24px' }} />,
+      title: 'GitHub',
+      content: <a href="https://github.com/coder-WangYu" target="_blank" rel="noopener noreferrer">github.com/coder-WangYu</a>
+    }
   ];
 
   return (
@@ -63,12 +81,27 @@ export default function About() {
           <Divider />
           
           <Title level={2}>联系我</Title>
-          <Paragraph style={{ fontSize: '16px' }}>
+          <Paragraph style={{ fontSize: '16px', marginBottom: '20px' }}>
             如果你有任何问题，或者想要交流，欢迎通过以下方式联系我：
           </Paragraph>
-          <Paragraph>
-            <MailOutlined /> 邮箱：coder_wangyu@163.com
-          </Paragraph>
+          
+          <div style={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap' }}>
+            {contactInfo.map((item, index) => (
+              <div key={index} style={{ textAlign: 'center', margin: '0 10px 20px' }}>
+                <Space direction="vertical" size="small" style={{ display: 'flex', alignItems: 'center' }}>
+                  <div style={{ marginBottom: 8 }}>
+                    {item.icon}
+                  </div>
+                  <Text strong style={{ display: 'block' }}>
+                    {item.title}
+                  </Text>
+                  <div>
+                    {item.content}
+                  </div>
+                </Space>
+              </div>
+            ))}
+          </div>
         </Card>
       </div>
     </section>
