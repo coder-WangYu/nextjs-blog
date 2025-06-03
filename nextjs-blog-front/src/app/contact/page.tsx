@@ -11,17 +11,17 @@ export default function Contact() {
     {
       icon: <MailOutlined style={{ fontSize: '24px' }} />,
       title: '邮箱',
-      content: <a href="mailto:example@example.com">example@example.com</a>
+      content: <a>coder_wangyu@163.com</a>
     },
     {
       icon: <WechatOutlined style={{ fontSize: '24px' }} />,
       title: '微信',
-      content: 'MyWechatID'
+      content: <a>Lrwy999999</a>
     },
     {
       icon: <GithubOutlined style={{ fontSize: '24px' }} />,
       title: 'GitHub',
-      content: <a href="https://github.com/username" target="_blank" rel="noopener noreferrer">github.com/username</a>
+      content: <a href="https://github.com/coder-WangYu" target="_blank" rel="noopener noreferrer">github.com/coder-WangYu</a>
     }
   ];
 
@@ -35,13 +35,13 @@ export default function Contact() {
         
         <Row gutter={[48, 24]} style={{ maxWidth: 1000, margin: '0 auto' }}>
           <Col xs={24} md={8}>
-            <Card title="联系方式" variant="borderless">
+            <Card title="联系方式" bordered={false}>
               <List
                 itemLayout="vertical"
                 dataSource={contactInfo}
                 renderItem={(item) => (
                   <List.Item>
-                    <Space direction="vertical" size="small">
+                    <Space direction="vertical" size="small" style={{ display: 'flex', alignItems: 'center' }}>
                       <div style={{ textAlign: 'center', marginBottom: 8 }}>
                         {item.icon}
                       </div>
@@ -59,7 +59,7 @@ export default function Contact() {
           </Col>
           
           <Col xs={24} md={16}>
-            <Card title="发送消息" variant="borderless">
+            <Card title="发送消息" bordered={false}>
               <Form layout="vertical">
                 <Form.Item 
                   label="姓名" 
@@ -97,7 +97,7 @@ export default function Contact() {
                 </Form.Item>
                 
                 <Form.Item>
-                  <Button type="primary" icon={<SendOutlined />} size="large">
+                  <Button type="primary" icon={<SendOutlined />} size="large" style={{ float: 'right' }}>
                     发送消息
                   </Button>
                 </Form.Item>

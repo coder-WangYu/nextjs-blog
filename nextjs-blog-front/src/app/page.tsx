@@ -98,7 +98,7 @@ export default function Home() {
           
           <Row justify="center">
             <Col xs={24} sm={24} md={16}>
-              <Card variant="borderless">
+              <Card bordered={false}>
                 <Paragraph style={{ fontSize: '16px' }}>
                   我是一名热爱生活、热爱创造的博主。通过这个博客，我希望能够分享我的经历、想法和创作，与志同道合的朋友们一起成长。
                 </Paragraph>

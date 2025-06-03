@@ -2,6 +2,7 @@
 
 import { Typography, Card, List, Divider, Avatar } from 'antd';
 import { UserOutlined, MailOutlined } from '@ant-design/icons';
+import Image from 'next/image';
 
 const { Title, Paragraph } = Typography;
 
@@ -22,9 +23,13 @@ export default function About() {
           <Paragraph type="secondary">了解我的故事和经历</Paragraph>
         </div>
         
-        <Card variant="borderless" style={{ maxWidth: 800, margin: '0 auto' }}>
+        <Card bordered={false} style={{ maxWidth: 800, margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 24 }}>
-            <Avatar size={120} icon={<UserOutlined />} style={{ backgroundColor: '#1890ff' }} />
+            <Avatar 
+              size={120} 
+              src="/avator.png"
+              alt="个人头像"
+            />
           </div>
           
           <Title level={2}>我是谁</Title>
@@ -62,7 +67,7 @@ export default function About() {
             如果你有任何问题，或者想要交流，欢迎通过以下方式联系我：
           </Paragraph>
           <Paragraph>
-            <MailOutlined /> 邮箱：example@example.com
+            <MailOutlined /> 邮箱：coder_wangyu@163.com
           </Paragraph>
         </Card>
       </div>

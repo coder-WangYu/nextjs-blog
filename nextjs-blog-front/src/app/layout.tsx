@@ -1,6 +1,6 @@
 'use client';
 
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter } from 'next/font/google';
 import 'normalize.css';
 import './globals.scss';
 import Link from 'next/link';
@@ -11,14 +11,9 @@ import { HomeOutlined, ReadOutlined, UserOutlined, MailOutlined } from '@ant-des
 const { Header, Content, Footer } = Layout;
 const { Text } = Typography;
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  variable: "--font-inter",
 });
 
 const menuItems = [
@@ -51,7 +46,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh-CN">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body className={inter.variable}>
         <ConfigProvider
           locale={zhCN}
           theme={{
@@ -75,9 +70,6 @@ export default function RootLayout({
               alignItems: 'center',
               justifyContent: 'space-between'
             }}>
-              <div className="logo" style={{ fontSize: '1.5rem', fontWeight: 700 }}>
-                <Link href="/" style={{ color: '#1890ff' }}>冬宇的博客</Link>
-              </div>
               <Menu 
                 mode="horizontal" 
                 items={menuItems} 
@@ -101,7 +93,7 @@ export default function RootLayout({
               padding: '1rem 0'
             }}>
               <Text style={{ color: '#e5e7eb' }}>
-                © {new Date().getFullYear()} 冬宇的个人博客 - 保留所有权利
+                © {new Date().getFullYear()} 我的个人博客 - 保留所有权利
               </Text>
             </Footer>
           </Layout>
