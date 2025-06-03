@@ -1,2 +1,4 @@
 /nextjs-blog-front/node_modules/
 /nextjs-blog-server/node_modules/
+nextjs-blog-front/.vscode
+nextjs-blog-server/.vscode
