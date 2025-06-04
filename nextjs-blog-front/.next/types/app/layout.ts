@@ -1,4 +1,4 @@
-// File: /Users/wangyu/Desktop/projects/nextjs-blog/nextjs-blog/nextjs-blog-front/src/app/layout.tsx
+// File: /Users/wangyu/Desktop/projects/nextjs-blog/nextjs-blog/nextjs-blog-front/src/app/layout.jsx
 import * as entry from '../../../src/app/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
