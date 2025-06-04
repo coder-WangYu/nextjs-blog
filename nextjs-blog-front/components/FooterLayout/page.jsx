@@ -1,4 +1,7 @@
-import { Footer, Text } from 'antd';
+import {Layout, Typography} from "antd";
+
+const { Footer } = Layout;
+const { Text } = Typography;
 
 export default function FooterLayout() {
   return (

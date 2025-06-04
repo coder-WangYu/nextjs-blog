@@ -1,8 +1,7 @@
 'use client';
 
 import { Typography, Card, List, Divider, Avatar, Space } from 'antd';
-import { UserOutlined, MailOutlined, GithubOutlined, WechatOutlined } from '@ant-design/icons';
-import Image from 'next/image';
+import { MailOutlined, GithubOutlined, WechatOutlined } from '@ant-design/icons';
 
 const { Title, Paragraph, Text } = Typography;
 

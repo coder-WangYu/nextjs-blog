@@ -1,7 +1,9 @@
 import React from 'react'
 import { HomeOutlined, ReadOutlined, UserOutlined } from '@ant-design/icons';
 import Link from 'next/link';
-import { Menu, Header } from 'antd';
+import {Layout, Menu} from 'antd';
+
+const {Header} = Layout;
 
 const menuItems = [
   {

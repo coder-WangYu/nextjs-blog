@@ -5,8 +5,8 @@ import 'normalize.css';
 import './globals.scss';
 import { ConfigProvider, Layout } from 'antd';
 import zhCN from 'antd/locale/zh_CN';
-// import HeaderLayout from 'components/HeaderLayout/page';
-import { useEffect } from 'react';
+import HeaderLayout from "../../components/HeaderLayout/page";
+import FooterLayout from "../../components/FooterLayout/page";
 
 const { Content } = Layout;
 
@@ -33,12 +33,13 @@ export default function RootLayout({
           }}
         >
           <Layout>
-            {/* <HeaderLayout /> */}
+            <HeaderLayout />
             <Content>
               <main>
                 {children}
               </main>
             </Content>
+            <FooterLayout />
           </Layout>
         </ConfigProvider>
       </body>
