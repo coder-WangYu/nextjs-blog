@@ -1,0 +1,75 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+  min-height: calc(100vh - 64px);
+  background-color: #f5f5f5;
+}
+
+.editorCard {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.header {
+  margin-bottom: 24px;
+}
+
+.titleInput {
+  font-size: 24px;
+  font-weight: 500;
+  
+  :global {
+    .ant-input {
+      border: none;
+      border-bottom: 2px solid #f0f0f0;
+      border-radius: 0;
+      padding: 8px 0;
+      
+      &:hover, &:focus {
+        border-color: #1890ff;
+        box-shadow: none;
+      }
+    }
+  }
+}
+
+.tagsSection {
+  margin-bottom: 16px;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.editor {
+  :global {
+    .w-md-editor {
+      box-shadow: none;
+      border: 1px solid #f0f0f0;
+      border-radius: 4px;
+    }
+
+    .w-md-editor-toolbar {
+      border-bottom: 1px solid #f0f0f0;
+      background-color: #fafafa;
+    }
+
+    .w-md-editor-preview {
+      box-shadow: none;
+      border-left: 1px solid #f0f0f0;
+      background-color: #fff;
+    }
+
+    .w-md-editor-text-pre > code,
+    .w-md-editor-text-input {
+      font-size: 16px;
+      line-height: 1.6;
+    }
+  }
+}
+
+.lastSaved {
+  color: #999;
+  font-size: 12px;
+  margin-top: 8px;
+} 

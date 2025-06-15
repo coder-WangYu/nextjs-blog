@@ -1,7 +1,7 @@
 import React from 'react'
 import { HomeOutlined, ReadOutlined, UserOutlined } from '@ant-design/icons';
 import Link from 'next/link';
-import {Layout, Menu} from 'antd';
+import {Layout, Menu, Button} from 'antd';
 
 const {Header} = Layout;
 
@@ -48,6 +48,10 @@ export default function HeaderLayout() {
           border: 'none'
         }} 
       />
+      {/* TODO：未登录时，点击后跳转到登录页面，登录后跳转到写博客页面 */}
+      <Button type="primary" href="/write">
+        写博客
+      </Button>
     </Header>
   )
 }

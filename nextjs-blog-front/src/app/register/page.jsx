@@ -8,6 +8,7 @@ import styles from './register.module.scss';
 const { Title, Text } = Typography;
 const { Content } = Layout;
 
+// TODO：邮箱注册方法，需要后端支持
 export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
