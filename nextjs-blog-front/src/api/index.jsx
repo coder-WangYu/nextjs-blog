@@ -1,4 +1,11 @@
-import { supabase } from '@/lib/supabaseClient';
+import { supabase } from '../lib/supabaseClient';
+
+// 获取首页文章
+export async function fetchArticlesForHome() {
+  const { data, error } = await supabase.from('articles').select('*').limit(6);
+  if (error) throw error;
+  return data;
+}
 
 // 获取所有文章
 export async function fetchArticles() {
@@ -33,4 +40,4 @@ export async function deleteArticle(id) {
   const { error } = await supabase.from('articles').delete().eq('id', id);
   if (error) throw error;
   return true;
-} 
+}

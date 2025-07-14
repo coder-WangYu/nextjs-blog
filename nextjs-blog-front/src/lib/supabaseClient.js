@@ -18,4 +18,4 @@ export async function testSupabaseConnection() {
   } catch (err) {
     console.error('Supabase 连接异常:', err);
   }
-} 
+}

@@ -3,38 +3,26 @@
 import Link from 'next/link';
 import { Button, Card, Typography, Row, Col, Divider } from 'antd';
 import { ReadOutlined, ArrowRightOutlined } from '@ant-design/icons';
-import React from 'react';
-import { testSupabaseConnection } from '@/lib/supabaseClient';
+import React, { useState } from 'react';
+import { useEffect } from 'react';
+import { fetchArticlesForHome } from '../api';
 
 const { Title, Paragraph, Text } = Typography;
 
 export default function Home() {
-  const recentPosts = [
-    {
-      id: 1,
-      title: '探索未知的旅程',
-      excerpt: '关于我最近的一次旅行经历和感悟，分享那些美丽的风景和难忘的时刻。',
-      coverImage: '/post-1.jpg',
-      date: '2023-12-15'
-    },
-    {
-      id: 2,
-      title: '编程的艺术',
-      excerpt: '探讨编程不仅是一门技术，更是一门需要创造力和美学的艺术。',
-      coverImage: '/post-2.jpg',
-      date: '2023-11-28'
-    },
-    {
-      id: 3,
-      title: '生活的思考',
-      excerpt: '关于现代生活方式的一些思考和感悟，寻找平衡与和谐。',
-      coverImage: '/post-3.jpg',
-      date: '2023-11-10'
-    }
-  ];
+  // {
+  //   id: 1,
+  //   title: '探索未知的旅程',
+  //   excerpt: '关于我最近的一次旅行经历和感悟，分享那些美丽的风景和难忘的时刻。',
+  //   coverImage: '/post-1.jpg',
+  //   date: '2023-12-15'
+  // },
+  const [recentPosts, setRecentPosts] = useState([]);
 
-  React.useEffect(() => {
-    testSupabaseConnection();
+  useEffect(() => {
+    fetchArticlesForHome().then(data => {
+      setRecentPosts(data);
+    });
   }, []);
 
   return (
@@ -57,7 +45,6 @@ export default function Home() {
         <div className="container">
           <div className="section-title">
             <Title level={2}>最新文章</Title>
-            <Paragraph type="secondary">分享我最近的思考和创作</Paragraph>
           </div>
           
           <Row gutter={[24, 24]}>
@@ -67,7 +54,7 @@ export default function Home() {
                   hoverable
                   cover={<div style={{ 
                     height: 200, 
-                    backgroundImage: `url(${post.coverImage})`,
+                    backgroundImage: `url(${post.coverImage}.jpg)`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center'
                   }} />}
