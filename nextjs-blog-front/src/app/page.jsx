@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { Button, Card, Typography, Row, Col, Divider } from 'antd';
 import { ReadOutlined, ArrowRightOutlined } from '@ant-design/icons';
+import React from 'react';
+import { testSupabaseConnection } from '@/lib/supabaseClient';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -30,6 +32,10 @@ export default function Home() {
       date: '2023-11-10'
     }
   ];
+
+  React.useEffect(() => {
+    testSupabaseConnection();
+  }, []);
 
   return (
     <>
@@ -85,33 +91,6 @@ export default function Home() {
                 </Card>
               </Col>
             ))}
-          </Row>
-        </div>
-      </section>
-
-      <section className="section about-section" style={{ backgroundColor: '#f5f5f5' }}>
-        <div className="container">
-          <div className="section-title">
-            <Title level={2}>关于我</Title>
-            <Paragraph type="secondary">了解更多关于我的故事</Paragraph>
-          </div>
-          
-          <Row justify="center">
-            <Col xs={24} sm={24} md={16}>
-              <Card bordered={false}>
-                <Paragraph style={{ fontSize: '16px' }}>
-                  我是一名热爱生活、热爱创造的博主。通过这个博客，我希望能够分享我的经历、想法和创作，与志同道合的朋友们一起成长。
-                </Paragraph>
-                <Paragraph style={{ fontSize: '16px' }}>
-                  无论是技术探索、旅行见闻还是生活感悟，我都希望通过文字的力量，传递价值，启发思考。
-                </Paragraph>
-                <div style={{ textAlign: 'center', marginTop: '24px' }}>
-                  <Button type="primary" size="large" href="/about">
-                    了解更多 <ReadOutlined />
-                  </Button>
-                </div>
-              </Card>
-            </Col>
           </Row>
         </div>
       </section>

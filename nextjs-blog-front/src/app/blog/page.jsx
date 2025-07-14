@@ -7,6 +7,7 @@ import { CalendarOutlined, FolderOutlined, ArrowRightOutlined } from '@ant-desig
 const { Title, Paragraph, Text } = Typography;
 
 export default function Blog() {
+  // TODO: 从数据库中获取博客文章 
   const blogPosts = [
     {
       id: 1,
@@ -15,46 +16,6 @@ export default function Blog() {
       coverImage: '/post-1.jpg',
       date: '2023-12-15',
       category: '旅行'
-    },
-    {
-      id: 2,
-      title: '编程的艺术',
-      excerpt: '探讨编程不仅是一门技术，更是一门需要创造力和美学的艺术。',
-      coverImage: '/post-2.jpg',
-      date: '2023-11-28',
-      category: '技术'
-    },
-    {
-      id: 3,
-      title: '生活的思考',
-      excerpt: '关于现代生活方式的一些思考和感悟，寻找平衡与和谐。',
-      coverImage: '/post-3.jpg',
-      date: '2023-11-10',
-      category: '随笔'
-    },
-    {
-      id: 4,
-      title: '摄影技巧分享',
-      excerpt: '分享一些我在摄影过程中学到的技巧和心得，帮助你拍出更好的照片。',
-      coverImage: '/post-1.jpg',
-      date: '2023-10-25',
-      category: '摄影'
-    },
-    {
-      id: 5,
-      title: '阅读与成长',
-      excerpt: '读书不仅是获取知识的方式，更是一种精神成长的过程。分享我最近读过的几本好书。',
-      coverImage: '/post-2.jpg',
-      date: '2023-10-12',
-      category: '阅读'
-    },
-    {
-      id: 6,
-      title: '音乐的力量',
-      excerpt: '音乐如何影响我们的情绪和生活，以及我最喜欢的几张专辑推荐。',
-      coverImage: '/post-3.jpg',
-      date: '2023-09-30',
-      category: '音乐'
     }
   ];
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import { HomeOutlined, ReadOutlined, UserOutlined } from '@ant-design/icons';
+import { HomeOutlined, ReadOutlined, FormOutlined } from '@ant-design/icons';
 import Link from 'next/link';
 import {Layout, Menu, Button} from 'antd';
 
@@ -16,10 +16,11 @@ const menuItems = [
     icon: <ReadOutlined />,
     label: <Link href="/blog">文章</Link>,
   },
+  // TODO：未登录时，点击后跳转到登录页面，登录后跳转到写博客页面
   {
-    key: 'about',
-    icon: <UserOutlined />,
-    label: <Link href="/about">关于</Link>,
+    key: 'write',
+    icon: <FormOutlined />,
+    label: <Link href="/write">写博客</Link>,
   }
 ];
 
@@ -48,9 +49,8 @@ export default function HeaderLayout() {
           border: 'none'
         }} 
       />
-      {/* TODO：未登录时，点击后跳转到登录页面，登录后跳转到写博客页面 */}
-      <Button type="primary" href="/write">
-        写博客
+      <Button style={{marginLeft: '10px'}} type='primary' href="/login">
+        登录/注册
       </Button>
     </Header>
   )

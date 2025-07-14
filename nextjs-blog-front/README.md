@@ -34,3 +34,14 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Supabase 配置
+
+在项目根目录下创建 `.env.local` 文件，并添加如下内容：
+
+```
+NEXT_PUBLIC_SUPABASE_URL=你的-supabase-url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=你的-supabase-anon-key
+```
+
+请将 `你的-supabase-url` 和 `你的-supabase-anon-key` 替换为你在 Supabase 控制台获取到的值。
