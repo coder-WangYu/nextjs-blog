@@ -3,23 +3,33 @@
 import Link from 'next/link';
 import { Typography, Card, Row, Col, Tag, Space, Pagination, Radio } from 'antd';
 import { CalendarOutlined, FolderOutlined, ArrowRightOutlined } from '@ant-design/icons';
+import { useState, useEffect } from 'react';
+import { fetchArticles, fetchArticleByCategory } from '@/api';
 
 const { Title, Paragraph, Text } = Typography;
 
 export default function Blog() {
-  // TODO: 从数据库中获取博客文章 
-  const blogPosts = [
-    {
-      id: 1,
-      title: '探索未知的旅程',
-      excerpt: '关于我最近的一次旅行经历和感悟，分享那些美丽的风景和难忘的时刻。',
-      coverImage: '/post-1.jpg',
-      date: '2023-12-15',
-      category: '旅行'
-    }
-  ];
+  const [blogPosts, setBlogPosts] = useState([]);
+
+  useEffect(() => {
+    fetchArticles().then(data => {
+      setBlogPosts(data);
+    });
+  }, []);
 
   const categories = ['全部', '技术', '旅行', '随笔', '摄影', '阅读', '音乐'];
+
+  function setCategory(value) {
+    if (value === '全部') {
+      fetchArticles().then(data => {
+        setBlogPosts(data);
+      });
+    } else {
+      fetchArticleByCategory(value).then(data => {
+        setBlogPosts(data)
+      })
+    }
+  }
 
   return (
     <section className="section blog-page">
@@ -32,7 +42,7 @@ export default function Blog() {
         <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
           <Radio.Group defaultValue="全部" buttonStyle="solid">
             {categories.map(category => (
-              <Radio.Button key={category} value={category}>
+              <Radio.Button key={category} value={category} onClick={() => setCategory(category)}>
                 {category}
               </Radio.Button>
             ))}
@@ -48,7 +58,7 @@ export default function Blog() {
                   <div 
                     style={{ 
                       height: 220, 
-                      backgroundImage: `url(${post.coverImage})`,
+                      backgroundImage: `url(${post.coverImage}.jpg)`,
                       backgroundSize: 'cover',
                       backgroundPosition: 'center'
                     }}
@@ -84,8 +94,9 @@ export default function Blog() {
           ))}
         </Row>
         
+        {/* TODO: 分页功能完善 */}
         <div style={{ textAlign: 'center', marginTop: '3rem' }}>
-          <Pagination defaultCurrent={1} total={50} />
+          <Pagination pageSize={6} defaultCurrent={1} total={blogPosts.length} />
         </div>
       </div>
     </section>

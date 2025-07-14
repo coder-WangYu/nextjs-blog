@@ -21,6 +21,13 @@ export async function fetchArticleById(id) {
   return data;
 }
 
+// 根据类型获取单篇文章
+export async function fetchArticleByCategory(value) {
+  const { data, error } = await supabase.from('articles').select('*').eq('category', value);
+  if (error) throw error;
+  return data;
+}
+
 // 新增文章
 export async function createArticle(article) {
   const { data, error } = await supabase.from('articles').insert([article]).select().single();
