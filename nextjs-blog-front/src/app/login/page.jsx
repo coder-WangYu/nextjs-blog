@@ -5,25 +5,39 @@ import { Form, Input, Button, Card, Typography, Divider, message, Layout } from 
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import styles from './login.module.scss';
 import { useRouter } from 'next/navigation';
+import { supabase } from '@/lib/supabaseClient';
+import { addUser } from '@/api';
 
 const { Title, Text } = Typography;
 const { Content } = Layout;
 
-// TODO：登录方法，需要后端支持，并且接入第三方登录（github）
+// 登录方法，邮箱 + 第三方登录（github）
 export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
   const router = useRouter();
 
+  // 初始化时检查用户状态
+  // useEffect(() => {
+  //   supabase.auth.onAuthStateChange((eve, session) => {
+  //     console.log(session)
+  //   })
+  // }, [])
+
   const onFinish = async (values) => {
     setLoading(true);
     try {
-      // 这里是模拟登录，实际项目中应该调用API
-      console.log('登录信息:', values);
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      let { data, error } = await supabase.auth.signInWithPassword({
+        email: values.email,
+        password: values.password
+      })
+      if (error) throw error
+      await addUser({
+        email: data.user.email,
+        user_id: data.user.id
+      })
       message.success('登录成功');
       router.push('/blog');
-      // 实际项目中这里应该进行页面跳转或状态更新
     } catch (error) {
       message.error('登录失败，请重试');
     } finally {
@@ -47,10 +61,10 @@ export default function LoginPage() {
             size="large"
           >
             <Form.Item
-              name="username"
-              rules={[{ required: true, message: '请输入用户名' }]}
+              name="email"
+              rules={[{ required: true, message: '请输入邮箱' }]}
             >
-              <Input prefix={<UserOutlined />} placeholder="用户名" />
+              <Input prefix={<UserOutlined />} placeholder="邮箱" />
             </Form.Item>
 
             <Form.Item

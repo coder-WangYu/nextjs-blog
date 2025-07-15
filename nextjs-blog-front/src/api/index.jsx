@@ -1,15 +1,15 @@
 import { supabase } from '../lib/supabaseClient';
 
-// 获取首页文章
-export async function fetchArticlesForHome() {
-  const { data, error } = await supabase.from('articles').select('*').limit(6);
+// 获取所有文章
+export async function fetchArticles() {
+  const { data, error } = await supabase.from('articles').select('*');
   if (error) throw error;
   return data;
 }
 
-// 获取所有文章
-export async function fetchArticles() {
-  const { data, error } = await supabase.from('articles').select('*');
+// 获取首页文章
+export async function fetchArticlesForHome() {
+  const { data, error } = await supabase.from('articles').select('*').limit(6);
   if (error) throw error;
   return data;
 }
@@ -48,3 +48,11 @@ export async function deleteArticle(id) {
   if (error) throw error;
   return true;
 }
+
+// 用户注册
+export async function addUser(user) {
+  const { data, error } = await supabase.from('users').insert([user]).select()
+  if (error) throw error
+  return data
+}
+          
