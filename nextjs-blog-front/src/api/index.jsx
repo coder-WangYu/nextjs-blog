@@ -69,4 +69,18 @@ export async function addUser(user) {
   if (error) throw error
   return data
 }
+
+// 根据ID获取用户信息
+export async function getUserInfoById(id) {
+  const { data, error } = await supabase.from('users').select('*').eq('user_id', id).single();
+  if (error) throw error;
+  return data;
+}
+
+// 更新用户信息
+export async function updateUser(info, id) {
+  const { data, error } = await supabase.from('users').update({ username: info }).eq('user_id', id).select()
+  if (error) throw error;
+  return data;
+}
           

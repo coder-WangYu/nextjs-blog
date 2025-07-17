@@ -1,7 +1,11 @@
-import React from 'react'
-import { HomeOutlined, ReadOutlined, FormOutlined } from '@ant-design/icons';
+import React, { useEffect, useRef } from 'react'
+import { HomeOutlined, ReadOutlined, FormOutlined, PlusOutlined, LoadingOutlined } from '@ant-design/icons';
 import Link from 'next/link';
-import {Layout, Menu, Button} from 'antd';
+import {Layout, Menu, Button, Upload} from 'antd';
+import { supabase } from '@/lib/supabaseClient';
+import { useState } from 'react';
+import { Avatar, Modal, Form, Input } from 'antd/lib';
+import { getUserInfoById, updateUser } from '@/api';
 
 const {Header} = Layout;
 
@@ -25,6 +29,28 @@ const menuItems = [
 ];
 
 export default function HeaderLayout() {
+  const [user, setUser] = useState({})
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const inputRef = useRef()
+
+  useEffect(() => {
+    supabase.auth.onAuthStateChange((info, userInfo) => {
+      getUserInfoById(userInfo.user.id).then(user => {
+        setUser(user)
+      })
+    })
+  }, [])
+
+  async function handleOk() {
+    const username = inputRef.current.input.value
+
+    await updateUser(username, user.user_id).then(res => {
+      setUser(res[0])
+    })
+    
+    setIsModalOpen(false);
+  };
+
   return (
     <Header style={{ 
       position: 'sticky', 
@@ -49,9 +75,26 @@ export default function HeaderLayout() {
           border: 'none'
         }} 
       />
-      <Button style={{marginLeft: '10px'}} type='primary' href="/login">
-        登录/注册
-      </Button>
+      
+      {
+        user 
+          ? <Avatar style={{cursor: 'pointer'}} size={40} onClick={() => setIsModalOpen(true)}>
+              {user.username ? user.username : 'USER'}
+            </Avatar>
+          : <Button style={{marginLeft: '10px'}} type='primary' href="/login">登录/注册</Button>
+      }
+
+      <Modal
+        title="修改个人信息"
+        closable={{ 'aria-label': 'Custom Close Button' }}
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={() => setIsModalOpen(false)}
+        cancelText="取消"
+        okText="提交"
+      >
+        昵称：<Input ref={inputRef} style={{width: '300px'}} defaultValue={user.username} />
+      </Modal>
     </Header>
   )
-}
+} 
