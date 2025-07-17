@@ -3,29 +3,64 @@
 import Link from 'next/link';
 import { Typography, Card, Row, Col, Tag, Space, Pagination, Radio } from 'antd';
 import { CalendarOutlined, FolderOutlined, ArrowRightOutlined } from '@ant-design/icons';
-import { useState, useEffect } from 'react';
-import { fetchArticles, fetchArticleByCategory } from '@/api';
+import { useState, useEffect, useRef } from 'react';
+import { fetchArticles, fetchArticleByCategory, fetchArticlesByPage, fetchArticleByCategoryByPage } from '@/api';
 
 const { Title, Paragraph, Text } = Typography;
 
 export default function Blog() {
   const [blogPosts, setBlogPosts] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [curCate, setCurCate] = useState("全部");
+  const [curPage, setCurPage] = useState(1);
+  const range = [0, 5]
+  const pageSize = 6;
 
   useEffect(() => {
     fetchArticles().then(data => {
-      setBlogPosts(data);
+      setTotal(data.length);
     });
+    fetchArticlesByPage(range).then(data => {
+      setBlogPosts(data)
+    })
   }, []);
 
   const categories = ['全部', '技术', '旅行', '随笔', '摄影', '阅读', '音乐'];
 
   function setCategory(value) {
+    setCurPage(1)
+    setCurCate(value)
+
     if (value === '全部') {
       fetchArticles().then(data => {
-        setBlogPosts(data);
-      });
+        setTotal(data.length);
+      })
+      fetchArticlesByPage(range).then(data => {
+        setBlogPosts(data)
+      })
     } else {
       fetchArticleByCategory(value).then(data => {
+        setTotal(data.length)
+      })
+      fetchArticleByCategoryByPage(value, range).then(data => {
+        setBlogPosts(data)
+      })
+    }
+  }
+
+  async function onPageChange(page, size) {
+    setCurPage(page)
+    const range = [page * size - size, page * size - 1]
+    
+    if (curCate === '全部') {
+      await fetchArticlesByPage(range).then(data => {
+        setBlogPosts(data)
+      })
+    } else {
+      await fetchArticleByCategory(curCate).then(data => {
+        setTotal(data.length)
+      })
+      await fetchArticleByCategoryByPage(curCate, range).then(data => {
         setBlogPosts(data)
       })
     }
@@ -36,7 +71,6 @@ export default function Blog() {
       <div className="container">
         <div className="section-title">
           <Title level={1}>博客文章</Title>
-          <Paragraph type="secondary">分享我的思考和创作</Paragraph>
         </div>
         
         <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
@@ -96,7 +130,13 @@ export default function Blog() {
         
         {/* TODO: 分页功能完善 */}
         <div style={{ textAlign: 'center', marginTop: '3rem' }}>
-          <Pagination pageSize={6} defaultCurrent={1} total={blogPosts.length} />
+          <Pagination
+            current={curPage}
+            pageSize={pageSize}
+            defaultCurrent={1} 
+            total={total}
+            onChange={(page, size) => onPageChange(page, size)} 
+          />
         </div>
       </div>
     </section>

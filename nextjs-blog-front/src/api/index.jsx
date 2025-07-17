@@ -14,6 +14,13 @@ export async function fetchArticlesForHome() {
   return data;
 }
 
+// 按页获取文章
+export async function fetchArticlesByPage(arr) {
+  const { data, error } = await supabase.from('articles').select('*').range(arr[0], arr[1]);
+  if (error) throw error;
+  return data;
+}
+
 // 根据ID获取单篇文章
 export async function fetchArticleById(id) {
   const { data, error } = await supabase.from('articles').select('*').eq('id', id).single();
@@ -21,9 +28,16 @@ export async function fetchArticleById(id) {
   return data;
 }
 
-// 根据类型获取单篇文章
+// 根据类型获取文章
 export async function fetchArticleByCategory(value) {
   const { data, error } = await supabase.from('articles').select('*').eq('category', value);
+  if (error) throw error;
+  return data;
+}
+
+// 按页获取单类型文章
+export async function fetchArticleByCategoryByPage(value, arr) {
+  const { data, error } = await supabase.from('articles').select('*').eq('category', value).range(arr[0], arr[1]);
   if (error) throw error;
   return data;
 }
