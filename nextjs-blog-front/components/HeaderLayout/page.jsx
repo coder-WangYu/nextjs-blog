@@ -1,11 +1,12 @@
 import React, { useEffect, useRef } from 'react'
-import { HomeOutlined, ReadOutlined, FormOutlined, PlusOutlined, LoadingOutlined } from '@ant-design/icons';
+import { HomeOutlined, ReadOutlined, FormOutlined, PlusOutlined, LoadingOutlined, DownOutlined } from '@ant-design/icons';
 import Link from 'next/link';
-import {Layout, Menu, Button, Upload} from 'antd';
+import {Layout, Menu, Button, Upload, Dropdown, Space, message } from 'antd';
 import { supabase } from '@/lib/supabaseClient';
 import { useState } from 'react';
 import { Avatar, Modal, Form, Input } from 'antd/lib';
 import { getUserInfoById, updateUser } from '@/api';
+import { useRouter } from 'next/navigation';
 
 const {Header} = Layout;
 
@@ -29,17 +30,54 @@ const menuItems = [
 ];
 
 export default function HeaderLayout() {
-  const [user, setUser] = useState({})
+  const [user, setUser] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const inputRef = useRef()
+  const router = useRouter()
+
+  const userItems = [
+    {
+      label: (
+        <span onClick={() => setIsModalOpen(true)}>修改信息</span>
+      ),
+      key: '0',
+    },
+    {
+      type: 'divider',
+    },
+    {
+      label: (
+        <span onClick={() => singOut()}>退出登录</span>
+      ),
+      key: '1',
+    }
+  ];
 
   useEffect(() => {
-    supabase.auth.onAuthStateChange((info, userInfo) => {
-      getUserInfoById(userInfo.user.id).then(user => {
-        setUser(user)
-      })
-    })
-  }, [])
+    // 初始获取
+    supabase.auth.getUser().then(({ data }) => {
+      if (data.user) {
+        getUserInfoById(data.user.id).then(user => {
+          setUser(user)
+        })
+      } else {
+        setUser(null)
+      }
+    });
+
+    // 监听登录/登出
+    const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
+      if (session && session.user) {
+        setUser(session.user)
+      } else {
+        setUser(null)
+      }
+    });
+
+    return () => {
+      listener.subscription.unsubscribe();
+    };
+  }, []);
 
   async function handleOk() {
     const username = inputRef.current.input.value
@@ -50,6 +88,12 @@ export default function HeaderLayout() {
     
     setIsModalOpen(false);
   };
+
+  async function singOut() {
+    await supabase.auth.signOut()
+    message.success("用户已退出登录")
+    router.refresh()
+  }
 
   return (
     <Header style={{ 
@@ -78,9 +122,15 @@ export default function HeaderLayout() {
       
       {
         user 
-          ? <Avatar style={{cursor: 'pointer'}} size={40} onClick={() => setIsModalOpen(true)}>
-              {user.username ? user.username : 'USER'}
-            </Avatar>
+          ? <Dropdown menu={{ items: userItems }} trigger={['click']}>
+              <a onClick={e => e.preventDefault()}>
+                <Space>
+                  <Avatar style={{cursor: 'pointer'}} size={40}>
+                    {user.username ? user.username : 'USER'}
+                  </Avatar>
+                </Space>
+              </a>
+            </Dropdown>
           : <Button style={{marginLeft: '10px'}} type='primary' href="/login">登录/注册</Button>
       }
 
@@ -93,7 +143,7 @@ export default function HeaderLayout() {
         cancelText="取消"
         okText="提交"
       >
-        昵称：<Input ref={inputRef} style={{width: '300px'}} defaultValue={user.username} />
+        昵称：<Input ref={inputRef} style={{width: '300px'}} />
       </Modal>
     </Header>
   )

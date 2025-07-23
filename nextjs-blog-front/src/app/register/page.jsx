@@ -22,13 +22,18 @@ export default function RegisterPage() {
     setLoading(true);
 
     try {
-      let { error } = await supabase.auth.signUp({
+      let { data, error } = await supabase.auth.signUp({
         email: values.email,
         password: values.password
       })
 
       if (error) message.error(error)
-        
+
+      await addUser({
+        email: data.user.email,
+        user_id: data.user.id
+      })
+
       message.success('注册成功');
       router.push('/login')
     } catch (error) {

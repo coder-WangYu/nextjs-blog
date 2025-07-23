@@ -347,12 +347,6 @@ const WritePage = () => {
                 发布文章
               </Button>
               <Button 
-                onClick={handleSaveDraft}
-                icon={<SaveOutlined />}
-              >
-                保存草稿
-              </Button>
-              <Button 
                 onClick={handlePreview}
                 icon={<EyeOutlined />}
               >
