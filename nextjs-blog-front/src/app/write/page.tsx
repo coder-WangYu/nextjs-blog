@@ -15,38 +15,8 @@ import {
   UnorderedListOutlined,
   CodeOutlined,
   TableOutlined,
-  FileTextOutlined,
-  FileMarkdownOutlined,
-  FileImageOutlined,
-  FilePdfOutlined,
-  FileWordOutlined,
-  FileExcelOutlined,
-  FilePptOutlined,
-  FileZipOutlined,
-  FileUnknownOutlined,
-  FileAddOutlined,
-  FileSearchOutlined,
-  FileSyncOutlined,
-  FileExclamationOutlined,
-  FileProtectOutlined,
-  FileTextTwoTone,
-  FileMarkdownTwoTone,
-  FileImageTwoTone,
-  FilePdfTwoTone,
-  FileWordTwoTone,
-  FileExcelTwoTone,
-  FilePptTwoTone,
-  FileZipTwoTone,
-  FileUnknownTwoTone,
-  FileAddTwoTone,
-  FileSearchTwoTone,
-  FileSyncTwoTone,
-  FileExclamationTwoTone,
-  FileProtectTwoTone,
-  FilterTwoTone,
-  FileTwoTone,
+  FileTextTwoTone
 } from '@ant-design/icons';
-import type { UploadProps } from 'antd';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
@@ -55,45 +25,51 @@ import rehypeSanitize from 'rehype-sanitize';
 import styles from './page.module.scss';
 import 'highlight.js/styles/atom-one-dark.css';
 import hljs from 'highlight.js';
+import { supabase } from '@/lib/supabaseClient';
+import { createArticle } from '@/api'; 
+import { useRouter } from 'next/navigation';
 
 const selectOptions = [
   {
     label: '技术',
-    value: 'technology'
+    value: '技术'
   },
   {
     label: '旅行',
-    value: 'travel'
+    value: '旅行'
   },
   {
     label: '随笔',
-    value: 'essays'
+    value: '随笔'
   },
   {
     label: '摄影',
-    value: 'photography'
+    value: '摄影'
   },
   {
     label: '阅读',
-    value: 'reading'
+    value: '阅读'
   },
   {
     label: '音乐',
-    value: 'music'
+    value: '音乐'
   }
 ];
 
 const WritePage = () => {
+  const [user, setUser] = useState(null)
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(false);
   const [tags, setTags] = useState<string[]>([]);
+  const [category, setCategory] = useState('')
   const [isPreview, setIsPreview] = useState(false);
   const [autoSave, setAutoSave] = useState(true);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewMode, setPreviewMode] = useState<'side' | 'full'>('side');
+  const router = useRouter()
 
   // 自动保存功能
   useEffect(() => {
@@ -111,37 +87,42 @@ const WritePage = () => {
     return () => clearTimeout(saveTimer);
   }, [content, title, autoSave]);
 
-  // 图片上传配置
-  const uploadProps: UploadProps = {
-    name: 'file',
-    action: '/api/upload', // TODO: 实现图片上传接口
-    showUploadList: false,
-    onChange(info) {
-      if (info.file.status === 'done') {
-        const imageUrl = info.file.response.url;
-        const imageMarkdown = `![${info.file.name}](${imageUrl})`;
-        setContent(prev => prev + '\n' + imageMarkdown);
-        message.success('图片上传成功');
-      } else if (info.file.status === 'error') {
-        message.error('图片上传失败');
-      }
-    },
-  };
+  // 获取用户信息
+  useEffect(() => {
+    supabase.auth.getUser().then(res => {
+      setUser(res.data.user)
+    })
+  }, [])
 
   const handleSubmit = async () => {
     if (!title.trim()) {
       message.error('请输入文章标题');
       return;
     }
+    if (!category.trim()) {
+      message.error('请选择文章类型')
+      return 
+    }
     if (!content.trim()) {
       message.error('请输入文章内容');
       return;
     }
 
+    const article = {
+      title,
+      category,
+      content,
+      author: user.email,
+      excerpt: content.slice(0, 20),
+      coverImage: 'test'
+    }
+
     setLoading(true);
     try {
-      // TODO: 实现文章保存逻辑
+      const { data, error } = await createArticle(article)
+      if (error) throw error
       message.success('文章发布成功！');
+      router.push('/blog')
     } catch (error) {
       message.error('发布失败，请重试');
     } finally {
@@ -172,9 +153,9 @@ const WritePage = () => {
     setTags([...tags, tag]);
   };
 
-  const handleChange = (value: string[]) => {
-    console.log(`selected ${value}`);
-  };
+  function selectChange(value) {
+    setCategory(value)
+  }
 
   // 工具栏功能
   const insertText = (prefix: string, suffix: string = '') => {
@@ -248,9 +229,9 @@ const WritePage = () => {
 
   const insertTable = () => {
     const tableTemplate = `| 标题1 | 标题2 | 标题3 |
-|-------|-------|-------|
-| 内容1 | 内容2 | 内容3 |
-| 内容4 | 内容5 | 内容6 |`;
+                           |-------|-------|-------|
+                           | 内容1 | 内容2 | 内容3 |
+                           | 内容4 | 内容5 | 内容6 |`;
     insertText(tableTemplate);
   };
 
@@ -325,6 +306,15 @@ const WritePage = () => {
     setPreviewMode(mode);
   };
 
+  // 实现图片上传
+  // const uploadProps = {
+  //   action: 'https://mrcawqcwjrtspohaufbq.supabase.co/storage/v1/s3',
+  //   beforeUpload: (file) => {
+  //     console.log(file)
+  //     // supabase.storage.from('next-blog').upload(file.name, file)
+  //   }
+  // }
+
   return (
     <div className={styles.container}>
       <Card className={styles.editorCard}>
@@ -352,7 +342,8 @@ const WritePage = () => {
               >
                 预览文章
               </Button>
-              <Upload {...uploadProps}>
+              <Upload>
+              {/* <Upload {...uploadProps}> */}
                 <Button icon={<UploadOutlined />}>上传封面</Button>
               </Upload>
             </Space>
@@ -377,18 +368,9 @@ const WritePage = () => {
               </Tag>
             ))}
             <Select
-              mode="multiple"
-              style={{ width: '100%', minWidth: 150 }}
-              placeholder="请选择标签"
-              onChange={handleChange}
+              style={{ width: 120 }}
+              onChange={selectChange}
               options={selectOptions}
-              optionRender={(option) => (
-                <Space>
-                  <span role="img" aria-label={option.data.label}>
-                    {option.data.label}
-                  </span>
-                </Space>
-              )}
             />
           </Space>
         </div>
@@ -445,10 +427,10 @@ const WritePage = () => {
                   rehypeSanitize
                 ]}
                 components={{
-                  code: ({ node, inline, className, children, ...props }) => {
+                  code: (props: any) => {
+                    const { inline, className, children, ...rest } = props;
                     const match = /language-(\w+)/.exec(className || '');
                     const language = match ? match[1] : '';
-                    
                     return !inline ? (
                       <div className={styles.codeBlockWrapper}>
                         {language && (
@@ -459,14 +441,14 @@ const WritePage = () => {
                         <pre className={styles.codeBlock}>
                           <code
                             className={language ? `language-${language}` : ''}
-                            {...props}
+                            {...rest}
                           >
                             {String(children).replace(/\n$/, '')}
                           </code>
                         </pre>
                       </div>
                     ) : (
-                      <code className={styles.inlineCode} {...props}>
+                      <code className={styles.inlineCode} {...rest}>
                         {children}
                       </code>
                     );
@@ -544,10 +526,10 @@ const WritePage = () => {
                   rehypeSanitize
                 ]}
                 components={{
-                  code: ({ node, inline, className, children, ...props }) => {
+                  code: (props: any) => {
+                    const { inline, className, children, ...rest } = props;
                     const match = /language-(\w+)/.exec(className || '');
                     const language = match ? match[1] : '';
-                    
                     return !inline ? (
                       <div className={styles.codeBlockWrapper}>
                         {language && (
@@ -558,14 +540,14 @@ const WritePage = () => {
                         <pre className={styles.codeBlock}>
                           <code
                             className={language ? `language-${language}` : ''}
-                            {...props}
+                            {...rest}
                           >
                             {String(children).replace(/\n$/, '')}
                           </code>
                         </pre>
                       </div>
                     ) : (
-                      <code className={styles.inlineCode} {...props}>
+                      <code className={styles.inlineCode} {...rest}>
                         {children}
                       </code>
                     );

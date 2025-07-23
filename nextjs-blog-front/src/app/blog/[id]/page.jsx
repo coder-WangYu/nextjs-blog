@@ -7,6 +7,12 @@ import { CalendarOutlined, FolderOutlined, ArrowLeftOutlined } from '@ant-design
 import Link from 'next/link';
 import styles from './blog-detail.module.scss';
 import { fetchArticleById } from '@/api';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import rehypeHighlight from 'rehype-highlight';
+import rehypeRaw from 'rehype-raw';
+import rehypeSanitize from 'rehype-sanitize';
+import 'highlight.js/styles/atom-one-dark.css';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -17,7 +23,6 @@ export default function BlogDetail() {
 
   useEffect(() => {
     fetchArticleById(params.id).then(data => {
-      data.tags = data.tags.split(',');
       setPost(data);
       setLoading(false);
     });
@@ -71,12 +76,6 @@ export default function BlogDetail() {
                 {post.category}
               </Tag>
             </Space>
-            
-            <div className={styles.tags}>
-              {post.tags.map(tag => (
-                <Tag key={tag} style={{ marginRight: '8px' }}>{tag}</Tag>
-              ))}
-            </div>
           </div>
           
           <div 
@@ -86,8 +85,45 @@ export default function BlogDetail() {
           
           <div 
             className={styles.blogContent}
-            dangerouslySetInnerHTML={{ __html: post.content }}
-          />
+          >
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              rehypePlugins={[
+                rehypeRaw,
+                [rehypeHighlight, { ignoreMissing: true, subset: false }],
+                rehypeSanitize
+              ]}
+              components={{
+                code: ({ node, inline, className, children, ...props }) => {
+                  const match = /language-(\w+)/.exec(className || '');
+                  const language = match ? match[1] : '';
+                  return !inline ? (
+                    <div className={styles.codeBlockWrapper}>
+                      {language && (
+                        <div className={styles.codeLanguage}>
+                          {language.toUpperCase()}
+                        </div>
+                      )}
+                      <pre className={styles.codeBlock}>
+                        <code
+                          className={language ? `language-${language}` : ''}
+                          {...props}
+                        >
+                          {String(children).replace(/\n$/, '')}
+                        </code>
+                      </pre>
+                    </div>
+                  ) : (
+                    <code className={styles.inlineCode} {...props}>
+                      {children}
+                    </code>
+                  );
+                }
+              }}
+            >
+              {post.content}
+            </ReactMarkdown>
+          </div>
         </Card>
       </div>
     </div>
